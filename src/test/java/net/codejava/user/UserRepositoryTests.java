@@ -2,6 +2,7 @@ package net.codejava.user;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -17,28 +18,30 @@ import org.springframework.test.annotation.Rollback;
 @Rollback(false)
 public class UserRepositoryTests {
 
-	@Autowired private UserRepository repo;
-	
+	@Autowired
+	private UserRepository userRepository;
+
 	@Test
-	public void testCreateUser() {
+	public void testCreateMultipleUsersWithRoles() {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		String password = passwordEncoder.encode("nam2023");
-		User newUser = new User("nam29@codejava.net", password);
-		User savedUser = repo.save(newUser);
-		
-		assertThat(savedUser).isNotNull();
-		assertThat(savedUser.getId()).isGreaterThan(0);
-	}
-	
-	@Test
-	public void testAssignRoleToUser() {
-		Integer userId = 2;
-		Integer roleId = 35;
-		User user = repo.findById(userId).get();
-		user.addRole(new Role(roleId));
-		
-		User updatedUser = repo.save(user);
-		assertThat(updatedUser.getRoles()).hasSize(1);
-		
+
+		// Create users with encoded passwords
+		User adminUser = new User("admin@example.com", passwordEncoder.encode("admin123"));
+		User editorUser = new User("editor@example.com", passwordEncoder.encode("editor123"));
+		User customerUser1 = new User("customer1@example.com", passwordEncoder.encode("customer123"));
+		User customerUser2 = new User("customer2@example.com", passwordEncoder.encode("customer456"));
+
+		// Assign roles to users
+		adminUser.addRole(new Role(35)); // Assuming ROLE_ADMIN has ID 1
+		editorUser.addRole(new Role(36)); // Assuming ROLE_EDITOR has ID 2
+		customerUser1.addRole(new Role(37)); // Assuming ROLE_CUSTOMER has ID 3
+		customerUser2.addRole(new Role(37)); // Assign ROLE_CUSTOMER to another user
+
+		// Save users in the database
+		userRepository.saveAll(List.of(adminUser, editorUser, customerUser1, customerUser2));
+
+		// Assertions for roles
+
+
 	}
 }

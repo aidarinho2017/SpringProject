@@ -10,3 +10,16 @@ curl -v -H "Content-Type: application/json" -d "{\"email\":\"nam@codejava.net\",
 
 Access protected API:
 curl -v -H "Authorization: Bearer <token>" localhost:8080/products
+
+Add a Product
+bash
+Copy code
+curl -X POST -H "Authorization: Bearer <JWT_TOKEN>" -H "Content-Type: application/json" \
+-d '{"name": "Laptop", "price": 1200.00}' \
+
+List All Products
+
+curl -X GET -H "Authorization: Bearer <JWT_TOKEN>" http://localhost:8080/products
+
+Get Product by ID
+curl -X GET -H "Authorization: Bearer <JWT_TOKEN>" http://localhost:8080/products/1
