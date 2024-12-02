@@ -8,6 +8,12 @@ Login:
 
 curl -v -H "Content-Type: application/json" -d "{\"email\":\"nam@codejava.net\", \"password\":\"nam2020\"}" localhost:8080/auth/login
 
+curl -v -H "Content-Type: application/json" -d "{\"email\":\"customer1@example.com\", \"password\":\"customer123\"}" localhost:8080/auth/login
+
+curl -v -H "Content-Type: application/json" -d "{\"email\":\"customer2@example.com\", \"password\":\"customer456\"}" localhost:8080/auth/login
+
+curl -v -H "Content-Type: application/json" -d "{\"email\":\"editor@example.com\", \"password\":\"editor123\"}" localhost:8080/auth/login
+
 Access protected API:
 curl -v -H "Authorization: Bearer <token>" localhost:8080/products
 
@@ -22,4 +28,4 @@ List All Products
 curl -X GET -H "Authorization: Bearer <JWT_TOKEN>" http://localhost:8080/products
 
 Get Product by ID
-curl -X GET -H "Authorization: Bearer <JWT_TOKEN>" http://localhost:8080/products/1
+curl -X GET -H "Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzMSxhZG1pbkBleGFtcGxlLmNvbSIsImlzcyI6IkNvZGVKYXZhIiwicm9sZXMiOiJbUk9MRV9BRE1JTl0iLCJpYXQiOjE3MzMxNDgwMzMsImV4cCI6MTczMzIzNDQzM30.S3qw9ZYyv-Cth6_NEVugYv_6MzfkOo2GVozFkejJbrx3qlG_Gjzmunl_fDgp8oi4tb5cKgqAh4Vg6Hu25FPFkA" http://localhost:8080/products/5

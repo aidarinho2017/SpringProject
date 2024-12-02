@@ -1,22 +1,13 @@
 package net.codejava.user;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 
+import net.codejava.cart.Cart;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -43,6 +34,8 @@ public class User implements UserDetails {
 		inverseJoinColumns = @JoinColumn(name = "role_id")
 	)
 	private Set<Role> roles = new HashSet<>();
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Cart cart;
 	
 	public User() { }
 	
@@ -50,6 +43,7 @@ public class User implements UserDetails {
 		this.email = email;
 		this.password = password;
 	}
+
 
 	public Integer getId() {
 		return id;
@@ -120,5 +114,12 @@ public class User implements UserDetails {
 	public void addRole(Role role) {
 		this.roles.add(role);
 	}
-	
+
+	public Cart getCart() {
+		return cart;
+	}
+
+	public void setCart(Cart cart) {
+		this.cart = cart;
+	}
 }

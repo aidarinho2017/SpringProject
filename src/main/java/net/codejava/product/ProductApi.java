@@ -2,14 +2,8 @@ package net.codejava.product;
 
 import java.net.URI;
 import java.util.List;
-
-
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-
-
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
