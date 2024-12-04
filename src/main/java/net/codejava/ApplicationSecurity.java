@@ -42,21 +42,22 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable();
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-		
+
 		http.authorizeRequests()
 				.antMatchers("/auth/login", "/docs/**", "/users").permitAll()
+				.antMatchers("/customer/orders/**").hasRole("CUSTOMER") // только для ROLE_CUSTOMER
 				.anyRequest().authenticated();
-		
-        http.exceptionHandling()
-                .authenticationEntryPoint(
-                    (request, response, ex) -> {
-                        response.sendError(
-                            HttpServletResponse.SC_UNAUTHORIZED,
-                            ex.getMessage()
-                        );
-                    }
-                );
-        
+
+		http.exceptionHandling()
+				.authenticationEntryPoint(
+						(request, response, ex) -> {
+							response.sendError(
+									HttpServletResponse.SC_UNAUTHORIZED,
+									ex.getMessage()
+							);
+						}
+				);
+
 		http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
 	}
 
