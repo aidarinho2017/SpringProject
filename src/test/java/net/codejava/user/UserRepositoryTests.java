@@ -3,7 +3,6 @@ package net.codejava.user;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,27 +20,46 @@ public class UserRepositoryTests {
 	@Autowired
 	private UserRepository userRepository;
 
+	@Autowired
+	private RoleRepository roleRepository;
+
 	@Test
-	public void testCreateMultipleUsersWithRoles() {
+	public void testCreateUsersWithRoles() {
+		// Создаем роли, если они отсутствуют
+		Role adminRole = roleRepository.findByName("ROLE_ADMIN")
+				.orElseGet(() -> roleRepository.save(new Role("ROLE_ADMIN")));
+		Role editorRole = roleRepository.findByName("ROLE_EDITOR")
+				.orElseGet(() -> roleRepository.save(new Role("ROLE_EDITOR")));
+		Role customerRole = roleRepository.findByName("ROLE_CUSTOMER")
+				.orElseGet(() -> roleRepository.save(new Role("ROLE_CUSTOMER")));
+
+		// Создаем пользователей
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-		// Create users with encoded passwords
 		User adminUser = new User("admin@example.com", passwordEncoder.encode("admin123"));
 		User editorUser = new User("editor@example.com", passwordEncoder.encode("editor123"));
-		User customerUser1 = new User("customer1@example.com", passwordEncoder.encode("customer123"));
-		User customerUser2 = new User("customer2@example.com", passwordEncoder.encode("customer456"));
+		User customerUser = new User("customer@example.com", passwordEncoder.encode("customer123"));
 
-		// Assign roles to users
-		adminUser.addRole(new Role(35)); // Assuming ROLE_ADMIN has ID 1
-		editorUser.addRole(new Role(36)); // Assuming ROLE_EDITOR has ID 2
-		customerUser1.addRole(new Role(37)); // Assuming ROLE_CUSTOMER has ID 3
-		customerUser2.addRole(new Role(37)); // Assign ROLE_CUSTOMER to another user
+		// Назначаем роли пользователям
+		adminUser.addRole(adminRole);
+		editorUser.addRole(editorRole);
+		customerUser.addRole(customerRole);
 
-		// Save users in the database
-		userRepository.saveAll(List.of(adminUser, editorUser, customerUser1, customerUser2));
+		// Сохраняем пользователей в базе данных
+		userRepository.saveAll(List.of(adminUser, editorUser, customerUser));
 
-		// Assertions for roles
+		// Проверяем сохранение
+		List<User> users = userRepository.findAll();
+		assertThat(users).hasSizeGreaterThanOrEqualTo(3);
 
+		// Проверяем, что роли назначены
+		User savedAdmin = userRepository.findByEmail("admin@example.com").orElseThrow();
+		assertThat(savedAdmin.getRoles()).extracting(Role::getName).containsExactly("ROLE_ADMIN");
 
+		User savedEditor = userRepository.findByEmail("editor@example.com").orElseThrow();
+		assertThat(savedEditor.getRoles()).extracting(Role::getName).containsExactly("ROLE_EDITOR");
+
+		User savedCustomer = userRepository.findByEmail("customer@example.com").orElseThrow();
+		assertThat(savedCustomer.getRoles()).extracting(Role::getName).containsExactly("ROLE_CUSTOMER");
 	}
 }

@@ -25,27 +25,29 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
-	@Column(nullable = false, length = 50, unique = true)
-	@Email @Length(min = 5, max = 50)
+
+	@Column(nullable = false, length = 255, unique = true) // Максимальный размер для email
+	@Email
+	@Length(min = 5, max = 255) // Ограничение по длине
 	private String email;
-	
-	@Column(nullable = false, length = 64)
-	@Length(min = 5, max = 64)
+
+	@Column(nullable = false, length = 255) // Максимальный размер для пароля
+	@Length(min = 5, max = 255) // Ограничение по длине
 	private String password;
 
 	@ManyToMany
 	@JoinTable(
-		name = "users_roles",
-		joinColumns = @JoinColumn(name = "user_id"),
-		inverseJoinColumns = @JoinColumn(name = "role_id")
+			name = "users_roles",
+			joinColumns = @JoinColumn(name = "user_id"),
+			inverseJoinColumns = @JoinColumn(name = "role_id")
 	)
 	private Set<Role> roles = new HashSet<>();
-	
-	public User() { }
-	
+
+	public User() {}
+
 	public User(String email, String password) {
 		this.email = email;
 		this.password = password;
@@ -116,9 +118,8 @@ public class User implements UserDetails {
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
 	}
-	
+
 	public void addRole(Role role) {
 		this.roles.add(role);
 	}
-	
 }
