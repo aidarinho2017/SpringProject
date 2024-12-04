@@ -1,9 +1,9 @@
 package net.codejava.product;
-import java.net.URI;
+
 import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
-import javax.validation.Valid;
+
 
 import net.codejava.order.Order;
 import net.codejava.order.OrderRequest;
@@ -11,6 +11,8 @@ import net.codejava.order.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -39,7 +41,7 @@ public class CustomerProductApi {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/buy/{productId}")
+    @PutMapping("/order/{productId}")
     @RolesAllowed("ROLE_CUSTOMER")
     public ResponseEntity<Order> buyProduct(@PathVariable int productId, @RequestBody OrderRequest orderRequest) {
         try {
@@ -66,6 +68,14 @@ public class CustomerProductApi {
     }
 
     private int getUserIdFromToken() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String subject = authentication.getName(); // Example: "customer1@example.com"
+        System.out.println("Email: " + subject);   // Extract the email
+        // maybe we should find userID through email, i dont know
+
         return 18;
     }
+//    private String getUserIdFromToken() {
+//
+//    }
 }
