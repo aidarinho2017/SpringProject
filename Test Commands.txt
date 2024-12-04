@@ -23,3 +23,8 @@ curl -X GET -H "Authorization: Bearer <JWT_TOKEN>" http://localhost:8080/product
 
 Get Product by ID
 curl -X GET -H "Authorization: Bearer <JWT_TOKEN>" http://localhost:8080/products/1
+
+Create a user via terminal
+curl -X PUT -H "Content-Type: application/json" -d '{"email":"user1@example.com", "password":"password123"}' http://localhost:8080/users
+curl -X PUT -H "Content-Type: application/json" -d '{"email":"user2@example.com", "password":"password123"}' http://localhost:8080/users
+curl -X PUT -H "Content-Type: application/json" -d '{"email":"user3@example.com", "password":"password123"}' http://localhost:8080/users
