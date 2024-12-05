@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import net.codejava.product.Product;
 import net.codejava.user.User;
 
@@ -65,5 +66,15 @@ public class Order {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", user=" + user.toString() +
+                ", product=" + product.toString() +
+                ", quantity=" + quantity +
+                '}';
     }
 }
