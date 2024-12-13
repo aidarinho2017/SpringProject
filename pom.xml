@@ -16,6 +16,11 @@
 	<description>Spring Security JWT Authentication Example Project</description>
 	<properties>
 		<java.version>11</java.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<gatling.version>3.9.0</gatling.version>
+		<gatling-maven-plugin.version>4.2.9</gatling-maven-plugin.version>
+		<maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
+		<maven-jar-plugin.version>3.2.2</maven-jar-plugin.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -91,7 +96,28 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>1.7.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.gatling.highcharts</groupId>
+			<artifactId>gatling-charts-highcharts</artifactId>
+			<version>${gatling.version}</version>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
+
+
 
 	<build>
 		<plugins>
@@ -107,7 +133,24 @@
                         <exclude>**/*.java</exclude>
                     </excludes>
                 </configuration>
-            </plugin>				
+            </plugin>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven-compiler-plugin.version}</version>
+			</plugin>
+			<plugin>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>${maven-jar-plugin.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>io.gatling</groupId>
+				<artifactId>gatling-maven-plugin</artifactId>
+				<version>${gatling-maven-plugin.version}</version>
+				<configuration>
+					<!-- Enterprise Cloud (https://cloud.gatling.io/) configuration reference: https://gatling.io/docs/gatling/reference/current/extensions/maven_plugin/#working-with-gatling-enterprise-cloud -->
+					<!-- Enterprise Self-Hosted configuration reference: https://gatling.io/docs/gatling/reference/current/extensions/maven_plugin/#working-with-gatling-enterprise-self-hosted -->
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 

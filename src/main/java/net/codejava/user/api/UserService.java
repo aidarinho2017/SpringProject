@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import net.codejava.user.User;
 import net.codejava.user.UserRepository;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class UserService {
@@ -21,5 +23,8 @@ public class UserService {
 		user.setPassword(encodedPassword);
 		
 		return repo.save(user);
+	}
+	public List<User> findAll() {
+		return repo.findAll();
 	}
 }

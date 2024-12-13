@@ -21,7 +21,9 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.time.Duration;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @RestController
 public class UserApi {
@@ -39,7 +41,7 @@ public class UserApi {
 				.build());
 	}
 
-	@PutMapping("/users")
+	@PostMapping("/users")
 	public ResponseEntity<?> createUser(@RequestBody @Valid User user, HttpServletRequest request) {
 		// Use IP address or a user-specific identifier as the key
 		String userKey = request.getRemoteAddr();
@@ -58,6 +60,15 @@ public class UserApi {
 			return ResponseEntity.status(429) // HTTP 429 Too Many Requests
 					.body("Rate limit exceeded. Please try again in 10 seconds.");
 		}
+	}
+	@GetMapping("/users")
+	public ResponseEntity<List<UserDTO>> getUsers() {
+		List<User> users = service.findAll(); // Assuming the service has a method to find all users
+		List<UserDTO> userDTOs = users.stream()
+				.map(user -> new UserDTO(user.getId(), user.getEmail()))
+				.collect(Collectors.toList());
+
+		return ResponseEntity.ok(userDTOs);
 	}
 }
 
