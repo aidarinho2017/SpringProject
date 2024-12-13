@@ -63,7 +63,7 @@ public class EmailSchedulerController {
     private JobDetail buildJobDetail(EmailRequest scheduleEmailRequest) {
         JobDataMap jobDataMap = new JobDataMap();
 
-        jobDataMap.put("email", scheduleEmailRequest.getEmail());
+        jobDataMap.put("email", scheduleEmailRequest.getEmails());
         jobDataMap.put("subject", scheduleEmailRequest.getSubject());
         jobDataMap.put("body", scheduleEmailRequest.getBody());
 

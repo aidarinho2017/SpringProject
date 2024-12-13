@@ -3,14 +3,14 @@ package net.codejava.scheduler.payload;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
 
 public class EmailRequest {
-    @Email
+
     @NotEmpty
-    private String email;
+    private List<@Email String> emails; // Список email-адресов
 
     @NotEmpty
     private String subject;
@@ -24,12 +24,12 @@ public class EmailRequest {
     @NotNull
     private ZoneId timeZone;
 
-    public String getEmail() {
-        return email;
+    public List<String> getEmails() {
+        return emails;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setEmails(List<String> emails) {
+        this.emails = emails;
     }
 
     public String getSubject() {

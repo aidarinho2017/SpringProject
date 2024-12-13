@@ -1,5 +1,6 @@
 package net.codejava.scheduler.jobs;
 
+import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 @Component
 public class PromotionJob extends QuartzJobBean {
@@ -24,11 +26,23 @@ public class PromotionJob extends QuartzJobBean {
 
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
-        String subject = "Big Sale Alert!";
-        String body = "We have amazing discounts on laptops! Don't miss out.";
-        String recipientEmail = "a_issakhanov@kbtu.kz"; // Замените на нужный адрес или создайте логику для получения списка адресов.
+        JobDataMap jobDataMap = context.getMergedJobDataMap();
 
-        sendMail(mailProperties.getUsername(), recipientEmail, subject, body);
+        // Получение данных из JobDataMap
+        @SuppressWarnings("unchecked")
+        List<String> recipientEmails = (List<String>) jobDataMap.get("emails");
+        String subject = jobDataMap.getString("subject");
+        String body = jobDataMap.getString("body");
+
+        if (recipientEmails == null || recipientEmails.isEmpty()) {
+            System.err.println("No recipient emails provided. Skipping email sending.");
+            return;
+        }
+
+        // Отправка письма каждому адресату
+        for (String recipientEmail : recipientEmails) {
+            sendMail(mailProperties.getUsername(), recipientEmail, subject, body);
+        }
     }
 
     private void sendMail(String fromEmail, String toEmail, String subject, String body) {
@@ -41,8 +55,9 @@ public class PromotionJob extends QuartzJobBean {
             messageHelper.setTo(toEmail);
 
             mailSender.send(message);
+            System.out.println("Email sent to: " + toEmail);
         } catch (MessagingException ex) {
-            System.err.println("Failed to send email: " + ex.getMessage());
+            System.err.println("Failed to send email to " + toEmail + ": " + ex.getMessage());
         }
     }
 }
