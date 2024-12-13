@@ -1,12 +1,9 @@
 package net.codejava.order;
 
-import javax.persistence.*;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-import net.codejava.product.Product;
+import net.codejava.cart.Cart;
 import net.codejava.user.User;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "orders")
@@ -20,20 +17,15 @@ public class Order {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
-
-    @NotNull
-    @Min(1)
-    private int quantity;
+    @JoinColumn(name = "cart_id", nullable = false)
+    private Cart cart;
 
     public Order() {
     }
 
-    public Order(User user, Product product, int quantity) {
+    public Order(User user, Cart cart) {
         this.user = user;
-        this.product = product;
-        this.quantity = quantity;
+        this.cart = cart;
     }
 
     public Integer getId() {
@@ -52,29 +44,11 @@ public class Order {
         this.user = user;
     }
 
-    public Product getProduct() {
-        return product;
+    public Cart getCart() {
+        return cart;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    @Override
-    public String toString() {
-        return "Order{" +
-                "id=" + id +
-                ", user=" + user.toString() +
-                ", product=" + product.toString() +
-                ", quantity=" + quantity +
-                '}';
+    public void setCart(Cart cart) {
+        this.cart = cart;
     }
 }
