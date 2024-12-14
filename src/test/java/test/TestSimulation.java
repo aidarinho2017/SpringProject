@@ -18,10 +18,19 @@ public class TestSimulation extends Simulation {
             .acceptHeader("application/json")
             .contentTypeHeader("application/json");
 
-    // Authorization header with a valid JWT token
-    private Map<String, String> headers_1 = new HashMap<>();
-    {
-        headers_1.put("Authorization", "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNixhZG1pbkBleGFtcGxlLmNvbSIsImlzcyI6IkNvZGVKYXZhIiwicm9sZXMiOiJbUk9MRV9BRE1JTl0iLCJpYXQiOjE3MzQxMTQwODksImV4cCI6MTczNDIwMDQ4OX0.Gm_TjhGKY5PgBJBB1hpRdm1i08P3iT0VZh8IDpFLvK_xhaU7ahgph3jfNnqPhu4qJSIYBfqPth4I1N6oQeMBr"); // Replace with a valid JWT token
+    //Feeder for test data
+    private static FeederBuilder.FileBased<Object> jsonFeeder = jsonFile("data/productJsonFile.json").random();
+
+
+   // Runtime parameters
+    private static final int USER_COUNT = 100;
+    private static final int RAMP_DURATION = 10;
+
+    // Before block
+    @Override
+    public void before(){
+        System.out.printf("Running test with %d users%n", USER_COUNT);
+        System.out.printf("Ramping users over %d seconds%n", RAMP_DURATION);
     }
 
     //HTTP calls
@@ -40,26 +49,34 @@ public class TestSimulation extends Simulation {
                     .header("Authorization", "Bearer #{jwtToken}"));
 
     private static ChainBuilder createNewProduct =
-            exec(http("Create New Product")
+            feed(jsonFeeder)
+                    .exec(http("Create New Product - #{name}")
                     .post("/products")
                     .header("Authorization", "Bearer #{jwtToken}")
                     .body(ElFileBody("bodies/newProductTemplate.json")).asJson());
 
+    private static ChainBuilder deleteProduct =
+            exec(http("Delete Product - #{name}")
+                    .delete("/admin/products/#{id}")
+                    .header("Authorization", "Bearer #{jwtToken}"));
 
     // Scenario definition
     private ScenarioBuilder scn = scenario("E-commerce test")
             .exec(authenticate)
             .pause(2)
-            .exec(getAllUsers);
-//            .exec(http("Get All Users")
-//                    .get("/users")  // Just the /users endpoint
-//                    .headers(headers_1)  // Add the Authorization header here
-//            );
-
+            .exec(getAllUsers)
+            .pause(2)
+            .exec(createNewProduct)
+            .pause(2)
+            .exec(deleteProduct);
     // Load Simulation
     {
         setUp(
-                scn.injectOpen(atOnceUsers(1))  // Inject 1 user to run the scenario
+//                scn.injectOpen(atOnceUsers(1))  // Inject 1 user to run the scenario
+                scn.injectOpen(
+                        nothingFor(5), // give test to warm up - to do nothing for 5 sec
+                        rampUsers(USER_COUNT).during(RAMP_DURATION)
+                )
         ).protocols(httpProtocol);
     }
 

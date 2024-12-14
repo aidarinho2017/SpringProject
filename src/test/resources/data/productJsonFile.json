@@ -1,0 +1,52 @@
+[
+  {
+    "id": 1,
+    "name": "iPhone 160",
+    "price": 140000.0
+  },
+  {
+    "id": 2,
+    "name": "Samsung Galaxy S24 Ultra",
+    "price": 130000.0
+  },
+  {
+    "id": 3,
+    "name": "MacBook Pro 16-inch (2024)",
+    "price": 250000.0
+  },
+  {
+    "id": 4,
+    "name": "LG Smart Refrigerator",
+    "price": 85000.0
+  },
+  {
+    "id": 5,
+    "name": "Sony WH-1000XM5 Headphones",
+    "price": 30000.0
+  },
+  {
+    "id": 6,
+    "name": "Canon EOS R5 Mirrorless Camera",
+    "price": 350000.0
+  },
+  {
+    "id": 7,
+    "name": "NordicTrack Treadmill",
+    "price": 95000.0
+  },
+  {
+    "id": 8,
+    "name": "Coleman Camping Tent",
+    "price": 8000.0
+  },
+  {
+    "id": 9,
+    "name": "Razer BlackWidow Keyboard",
+    "price": 10000.0
+  },
+  {
+    "id": 10,
+    "name": "Philips Hue Smart Light Bulb",
+    "price": 4000.0
+  }
+]

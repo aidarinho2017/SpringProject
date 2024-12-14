@@ -1,5 +1,4 @@
 {
-
-  "name": "iPhone",
-  "price": 200000
+  "name": "#{name}",
+  "price": #{price}
 }
