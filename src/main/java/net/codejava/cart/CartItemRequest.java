@@ -1,13 +1,12 @@
-package net.codejava.order;
+package net.codejava.cart;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-public class OrderRequest {
+public class CartItemRequest {
     @NotNull
     private Integer productId;
 
-    @NotNull
     @Min(1)
     private int quantity;
 

@@ -44,9 +44,13 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
 		http.authorizeRequests()
-				.antMatchers("/auth/login", "/docs/**", "/users").permitAll()
-				.antMatchers("/customer/orders/**").hasRole("CUSTOMER") // только для ROLE_CUSTOMER
-				.anyRequest().authenticated();
+				.antMatchers("/auth/login", "/docs/**", "/users", "/swagger-ui.html",
+						"/swagger-ui/**",
+						"/v3/api-docs/**",
+						"/v2/api-docs/**").permitAll() // Доступ без авторизации
+				.antMatchers("/customer/orders/**").hasRole("CUSTOMER") // Доступ для ROLE_CUSTOMER
+				.antMatchers("/admin/schedule/**").hasRole("ADMIN") // Доступ для ROLE_ADMIN
+				.anyRequest().authenticated(); // Все остальные запросы требуют авторизации
 
 		http.exceptionHandling()
 				.authenticationEntryPoint(
