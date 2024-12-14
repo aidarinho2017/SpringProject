@@ -46,7 +46,7 @@ public class EmailSchedulerController {
             return ResponseEntity.ok(scheduleEmailResponse);
 
         }catch (SchedulerException ex) {
-                log.error("Error scheduling email", ex);
+//                log.error("Error scheduling email", ex);
 
                 EmailResponse emailResponse = new EmailResponse(false,
                         "Error scheduling email. Please try later!");

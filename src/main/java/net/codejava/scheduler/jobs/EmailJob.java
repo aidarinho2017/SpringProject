@@ -35,7 +35,7 @@ public class EmailJob extends QuartzJobBean {
         List<String> recipientEmails = (List<String>) jobDataMap.get("emails");
 
         if (recipientEmails == null || recipientEmails.isEmpty()) {
-            log.warn("No recipient emails provided. Skipping job execution.");
+//            log.warn("No recipient emails provided. Skipping job execution.");
             return; // Пропускаем выполнение, если список email пуст
         }
 
@@ -45,9 +45,9 @@ public class EmailJob extends QuartzJobBean {
         for (String recipientEmail : recipientEmails) {
             try {
                 sendMail(mailProperties.getUsername(), recipientEmail, subject, body);
-                log.info("Email sent to {}", recipientEmail);
+//                log.info("Email sent to {}", recipientEmail);
             } catch (Exception e) {
-                log.error("Failed to send email to {}: {}", recipientEmail, e.getMessage());
+//                log.error("Failed to send email to {}: {}", recipientEmail, e.getMessage());
             }
         }
     }

@@ -25,7 +25,7 @@ public class AdminSchedulerController {
     public ResponseEntity<String> schedulePromotionEmails() {
         try {
             // Список email-адресов
-            List<String> emails = Arrays.asList("a_issakhanov@kbtu.kz", "a_seidazym@kbtu.kz");
+            List<String> emails = Arrays.asList("a_issakhanov@kbtu.kz", "a_zhanserkenov@kbtu.kz");
 
             // Тема и текст письма
             String subject = "Big Sale Alert!";
@@ -39,7 +39,7 @@ public class AdminSchedulerController {
 
             return ResponseEntity.ok("Promotion emails scheduled to repeat every 10 seconds!");
         } catch (SchedulerException e) {
-            log.error("Error scheduling promotion emails", e);
+//            log.error("Error scheduling promotion emails", e);
             return ResponseEntity.status(500).body("Error scheduling promotion emails.");
         }
     }
